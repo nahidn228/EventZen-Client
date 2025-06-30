@@ -3,6 +3,8 @@ import App from "../App";
 
 import { createBrowserRouter } from "react-router";
 import AddEvent from "@/Pages/AddEvent";
+import MyEvents from "@/Pages/MyEvents";
+import Registration from "@/Pages/Registration";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
       {
         path: "/addEvent",
         element: <AddEvent />,
+      },
+      {
+        path: "/myEvents",
+        element: <MyEvents />,
+      },
+      {
+        path: "/registration",
+        element: <Registration />,
       },
     ],
   },

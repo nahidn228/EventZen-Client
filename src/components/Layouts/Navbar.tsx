@@ -41,7 +41,7 @@ const NewNavbar = () => {
       </li>
       <li>
         <NavLink
-          to="/myEvent"
+          to="/myEvents"
           className={({ isActive }) => (isActive ? "bg-blue-700" : "")}
         >
           MY Event
