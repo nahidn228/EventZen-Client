@@ -12,7 +12,10 @@ interface Event {
   attendeeCount: number;
 }
 
-const MyEventCard: React.FC<{ event: Event; refetch: () => void }> = ({ event, refetch }) => {
+const MyEventCard: React.FC<{ event: Event; refetch: () => void }> = ({
+  event,
+  refetch,
+}) => {
   const axiosPublic = useAxiosPublic();
   const [loading, setLoading] = useState(false);
 
@@ -45,29 +48,40 @@ const MyEventCard: React.FC<{ event: Event; refetch: () => void }> = ({ event, r
   };
 
   return (
-    <div className="border rounded shadow hover:shadow-lg transition p-4 space-y-2 bg-white">
-      <h3 className="text-lg font-semibold truncate">{event.eventTitle}</h3>
-      <p className="text-sm text-gray-600">
-        🧑 Posted by: {event.name}
-      </p>
-      <p className="text-sm text-gray-500">
-        📅 {new Date(event.eventDate).toLocaleString()}
-      </p>
-      <p className="text-sm text-gray-500">📍 {event.location}</p>
-      <p className="text-xs text-gray-700 truncate">{event.description}</p>
-      <p className="text-xs">🎟️ {event.attendeeCount} attendees</p>
-      <div className="flex gap-2">
+    <div className="  border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition p-4 space-y-3 flex flex-col justify-between">
+      <div className="space-y-2">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 truncate">
+          {event.eventTitle}
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          🧑 Posted by: {event.name}
+        </p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          📅 {new Date(event.eventDate).toLocaleString()}
+        </p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          📍 {event.location}
+        </p>
+        <p className="text-xs text-gray-700 dark:text-gray-300 line-clamp-2">
+          {event.description}
+        </p>
+        <p className="text-xs text-gray-600 dark:text-gray-400">
+          🎟️ {event.attendeeCount} attendees
+        </p>
+      </div>
+
+      <div className="flex gap-2 pt-2">
         <button
           onClick={handleUpdate}
           disabled={loading}
-          className="flex-1 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="flex-1 px-3 py-1 rounded-md bg-[#3A39CE] hover:bg-[#2a29a6] text-white disabled:opacity-50 transition"
         >
           Update
         </button>
         <button
           onClick={handleDelete}
           disabled={loading}
-          className="flex-1 bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 disabled:opacity-50"
+          className="flex-1 px-3 py-1 rounded-md bg-[#ED4250] hover:bg-[#c7333e] text-white disabled:opacity-50 transition"
         >
           Delete
         </button>

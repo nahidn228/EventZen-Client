@@ -48,64 +48,74 @@ const Events = () => {
   };
 
   return (
-    <div className="w-11/12 md:max-w-screen-xl py-10 mx-auto min-h-screen flex flex-col justify-between">
-      <div>
-        <div className="flex flex-col lg:flex-row justify-center items-center gap-5 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search input */}
-            <div className="flex p-1 overflow-hidden border rounded-lg focus-within:ring focus-within:border-blue-400 focus-within:ring-blue-300">
-              <input
-                className="px-6 py-2 text-gray-700 placeholder-gray-500 bg-white outline-none"
-                type="text"
-                placeholder="Search by title..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-
-            {/* Date filter */}
-            <select
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-              className="border p-4 rounded-md"
-            >
-              <option value="">All Dates</option>
-              <option value="today">Today</option>
-              <option value="current-week">Current Week</option>
-              <option value="last-week">Last Week</option>
-              <option value="current-month">Current Month</option>
-              <option value="last-month">Last Month</option>
-            </select>
+    <div className=" w-11/12 md:max-w-screen-xl py-10 mx-auto min-h-screen flex flex-col gap-8">
+      {/* Filters section */}
+      <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-6 mb-6">
+        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+          {/* Search input */}
+          <div className="flex rounded-lg border border-[#ED4250] focus-within:ring-2 focus-within:ring-[#ED4250] transition">
+            <input
+              className="px-4 py-2 w-full md:w-64 text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 placeholder-gray-500 outline-none rounded-lg"
+              type="text"
+              placeholder="Search by title..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
 
-          <div className="flex gap-4 items-center">
-            {/* Sort */}
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="border p-4 rounded-md"
-            >
-              <option value="">Sort By Date</option>
-              <option value="desc">Newest First</option>
-              <option value="asc">Oldest First</option>
-            </select>
-
-            <button onClick={handleReset} className="btn">
-              Reset
-            </button>
-          </div>
+          {/* Date filter */}
+          <select
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="border border-[#3A39CE] dark:bg-gray-800 dark:text-gray-200 p-2 md:p-3 rounded-lg focus:ring-2 focus:ring-[#3A39CE] transition"
+          >
+            <option value="">All Dates</option>
+            <option value="today">Today</option>
+            <option value="current-week">Current Week</option>
+            <option value="last-week">Last Week</option>
+            <option value="current-month">Current Month</option>
+            <option value="last-month">Last Month</option>
+          </select>
         </div>
 
-        {/* Loading state */}
-        {isLoading && <p className="text-center">Loading events...</p>}
+        <div className="flex gap-4 items-center w-full md:w-auto">
+          {/* Sort */}
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="border border-[#3A39CE] dark:bg-gray-800 dark:text-gray-200 p-2 md:p-3 rounded-lg focus:ring-2 focus:ring-[#3A39CE] transition"
+          >
+            <option value="">Sort By Date</option>
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
+          </select>
 
-        {/* Event list */}
-        <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {events.length === 0 && !isLoading && <p>No events found.</p>}
-          {events.map((event: Event) => (
-            <EventCard key={event._id} event={event} refetch={refetch} />
-          ))}
+          <button
+            onClick={handleReset}
+            className="px-4 py-2 rounded-lg bg-[#ED4250] text-white hover:bg-[#c9333e] transition"
+          >
+            Reset
+          </button>
         </div>
+      </div>
+
+      {/* Loading state */}
+      {isLoading && (
+        <p className="text-center text-gray-500 dark:text-gray-400">
+          Loading events...
+        </p>
+      )}
+
+      {/* Event list */}
+      <div className="grid grid-cols-1 gap-6 mt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {events.length === 0 && !isLoading && (
+          <p className="col-span-full text-center text-gray-500 dark:text-gray-400">
+            No events found.
+          </p>
+        )}
+        {events.map((event: Event) => (
+          <EventCard key={event._id} event={event} refetch={refetch} />
+        ))}
       </div>
     </div>
   );

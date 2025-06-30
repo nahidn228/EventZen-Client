@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "@/hook/useAxiosPublic";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 interface RegisterFormValues {
   name: string;
@@ -21,6 +22,7 @@ interface RegisterFormValues {
 }
 
 const Registration = () => {
+  const navigate = useNavigate();
   const form = useForm<RegisterFormValues>({
     defaultValues: {
       name: "",
@@ -40,6 +42,7 @@ const Registration = () => {
       await axiosPublic.post("/users/create-user", values);
       form.reset();
       alert("Registration successful!");
+      navigate('/login')
     } catch (error) {
       console.error("Failed to register:", error);
       alert("Failed to register");
@@ -49,7 +52,7 @@ const Registration = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow space-y-6 ">
+    <div className="min-h-screen max-w-md mx-auto mt-10 p-6 border rounded shadow space-y-6 ">
       <h2 className="text-2xl font-semibold text-center">Register</h2>
 
       <Form {...form}>

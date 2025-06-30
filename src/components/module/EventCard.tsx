@@ -34,7 +34,7 @@ const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
     }
   };
   return (
-    <div className="group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transform transition duration-300 bg-white">
+    <div className="group rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transform transition duration-300 flex flex-col justify-between">
       {/* Event image */}
       <div className="relative h-48 overflow-hidden">
         <img
@@ -47,7 +47,7 @@ const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
           <button
             onClick={handleJoinEvent}
             disabled={isJoining}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 rounded-md bg-[#3A39CE] hover:bg-[#2a29a6] text-white disabled:opacity-50 transition"
           >
             {isJoining ? "Joining..." : "Join Event"}
           </button>
@@ -55,19 +55,27 @@ const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
       </div>
 
       {/* Event content */}
-      <div className="p-4 space-y-2">
-        <h3 className="text-lg font-semibold text-gray-800 truncate">
-          {event.eventTitle}
-        </h3>
-        <p className="text-sm text-gray-500">
-          📍 {event.location} &nbsp;|&nbsp; 🗓{" "}
-          {new Date(event.eventDate).toLocaleDateString()}
-        </p>
-        <p className="text-xs text-gray-600">
-          Name: <span className="font-medium">{event.name}</span> | 🎟️{" "}
-          {event.attendeeCount} attendees
-        </p>
-        <p className="text-gray-700 text-sm truncate">{event.description}</p>
+      <div className="p-4 flex flex-col flex-1 justify-between">
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 truncate">
+            {event.eventTitle}
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+            📍 <span className="truncate">{event.location}</span>
+            <span className="mx-1">|</span> 🗓{" "}
+            {new Date(event.eventDate).toLocaleDateString()}
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            Name: <span className="font-medium">{event.name}</span>{" "}
+            &nbsp;|&nbsp; 🎟️ {event.attendeeCount} attendees
+          </p>
+          <p className="text-gray-700 dark:text-gray-400 text-sm line-clamp-2">
+            {event.description}
+          </p>
+        </div>
+
+        {/* always at the bottom */}
+        <div className="h-1 w-16 bg-[#ED4250] rounded mt-3"></div>
       </div>
     </div>
   );

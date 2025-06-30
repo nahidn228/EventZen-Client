@@ -1,6 +1,5 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { ModeToggle } from "../mode-toggle";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,14 +10,36 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import useAxiosPublic from "@/hook/useAxiosPublic";
+import { useEffect } from "react";
+
 
 const NewNavbar = () => {
+  const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
+
+  const userStr = localStorage.getItem("data");
+  const user = userStr ? JSON.parse(userStr) : null;
+  const userName = user?.data?.data?.[0]?.name;
+  const userEmail = user?.data?.data?.[0]?.email;
+  const userPhoto = user?.data?.data?.[0]?.photoURL;
+
+  const handleLogout = () => {
+    localStorage.removeItem("data");
+    localStorage.removeItem("currentUser");
+    navigate("/login");
+  };
+
   const navLinks = (
     <>
       <li>
         <NavLink
           to="/"
-          className={({ isActive }) => (isActive ? "bg-blue-700" : "")}
+          className={({ isActive }) =>
+            isActive
+              ? "font-medium text-[#ED4250] underline underline-offset-4"
+              : "font-medium  hover:text-[#ED4250] transition"
+          }
         >
           Home
         </NavLink>
@@ -26,40 +47,99 @@ const NewNavbar = () => {
       <li>
         <NavLink
           to="/events"
-          className={({ isActive }) => (isActive ? "bg-blue-700" : "")}
+          className={({ isActive }) =>
+            isActive
+              ? "font-medium text-[#ED4250] underline underline-offset-4"
+              : "font-medium  hover:text-[#ED4250] transition"
+          }
         >
           Events
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          to="/addEvent"
-          className={({ isActive }) => (isActive ? "bg-blue-700" : "")}
-        >
-          Add Event
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/myEvents"
-          className={({ isActive }) => (isActive ? "bg-blue-700" : "")}
-        >
-          MY Event
-        </NavLink>
-      </li>
+      {userEmail ? (
+        <>
+          <li>
+            <NavLink
+              to="/addEvent"
+              className={({ isActive }) =>
+                isActive
+                  ? "font-medium text-[#ED4250] underline underline-offset-4"
+                  : "font-medium  hover:text-[#ED4250] transition"
+              }
+            >
+              Add Event
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/myEvents"
+              className={({ isActive }) =>
+                isActive
+                  ? "font-medium text-[#ED4250] underline underline-offset-4"
+                  : "font-medium  hover:text-[#ED4250] transition"
+              }
+            >
+              My Events
+            </NavLink>
+          </li>
+        </>
+      ) : (
+        <>
+          <li>
+            <NavLink
+              to="/registration"
+              className={({ isActive }) =>
+                isActive
+                  ? "font-medium text-[#ED4250] underline underline-offset-4"
+                  : "font-medium  hover:text-[#ED4250] transition"
+              }
+            >
+              Register
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                isActive
+                  ? "font-medium text-[#ED4250] underline underline-offset-4"
+                  : "font-medium  hover:text-[#ED4250] transition"
+              }
+            >
+              Login
+            </NavLink>
+          </li>
+        </>
+      )}
     </>
   );
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const userStr = localStorage.getItem("currentUser");
+        const user = userStr ? JSON.parse(userStr) : null;
+        const email = user?.email;
+        if (!email) return;
+        const { data } = await axiosPublic.get(`/users/current-user`, {
+          params: { email },
+        });
+        localStorage.setItem("data", JSON.stringify({ data }));
+      } catch (error) {
+        console.error("Failed to fetch current user:", error);
+      }
+    };
+    fetchCurrentUser();
+  }, [axiosPublic]);
+
   return (
-    <div className=" shadow-sm">
-      <div className="shadow-sm ">
-        <div className="navbar max-w-screen-2xl mx-auto">
-          <div className="navbar-start">
+    <div className="bg-background shadow-sm sticky top-0 z-50 border-b border-border">
+      <div className="max-w-screen-2xl mx-auto px-4 py-2 flex items-center justify-between">
+        {/* Left: Logo & mobile menu */}
+        <div className="flex items-center gap-4">
+          <div className="lg:hidden">
             <div className="dropdown">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost lg:hidden"
-              >
+              <button tabIndex={0} className="btn btn-ghost text-foreground">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -67,91 +147,88 @@ const NewNavbar = () => {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  {" "}
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="2"
-                    d="M4 6h16M4 12h8m-8 6h16"
-                  />{" "}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
-              </div>
+              </button>
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52 p-2 shadow"
+                className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-background rounded-box w-52 space-y-1 border border-border"
               >
                 {navLinks}
               </ul>
             </div>
-            <a className="btn btn-ghost text-xl">EventZen</a>
           </div>
-          <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-1">{navLinks}</ul>
-          </div>
-          <div className="navbar-end">
-            <div className="flex items-center gap-2">
-              <div className="dropdown dropdown-end">
-                <ModeToggle />
-              </div>
-              <div className="dropdown dropdown-end">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      className="btn btn-ghost btn-circle avatar"
-                    >
-                      <div className="w-12 rounded-full">
-                        <img
-                          alt="Tailwind CSS Navbar component"
-                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                        />
-                      </div>
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="start">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem>
-                        Profile
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        Billing
-                        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        Settings
-                        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        Keyboard shortcuts
-                        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem>Team</DropdownMenuItem>
+          <img
+            src="./Untitled.jpg"
+            alt="Logo"
+            className="h-8 w-auto md:h-10 lg:h-12 object-contain rounded-xl  border-2"
+          />
+        </div>
 
-                      <DropdownMenuItem>
-                        New Team
-                        <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>GitHub</DropdownMenuItem>
-                    <DropdownMenuItem>Support</DropdownMenuItem>
-                    <DropdownMenuItem disabled>API</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      Log out
-                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+        {/* Center nav links */}
+        <div className="hidden lg:flex">
+          <ul className="menu menu-horizontal gap-4">{navLinks}</ul>
+        </div>
+
+        {/* Right: Mode toggle & user */}
+        <div className="flex items-center gap-3">
+          <ModeToggle />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div
+                className="tooltip tooltip-bottom"
+                data-tip={userName || "User"}
+              >
+                <div className="btn btn-ghost btn-circle avatar">
+                  <div className="w-10 rounded-full overflow-hidden ring-2 ring-primary/50 hover:ring-primary transition">
+                    <img
+                      alt="User avatar"
+                      src={
+                        userPhoto ||
+                        `https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp`
+                      }
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuLabel className="truncate">
+                My Account ({userName})
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => navigate("/profile")}>
+                  Profile
+                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              {userEmail ? (
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer"
+                >
+                  Log out
+                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem
+                  onClick={() => navigate("/login")}
+                  className="cursor-pointer"
+                >
+                  Log in
+                  <DropdownMenuShortcut>⇧⌘</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

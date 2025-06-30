@@ -41,7 +41,15 @@ const AddEvent = () => {
     console.log(values);
     try {
       setLoading(true);
-      await axiosPublic.post("/events/create-Event", values);
+
+      const currentUser = localStorage.getItem("currentUser");
+      const user = currentUser ? JSON.parse(currentUser) : null;
+      const email = user?.email;
+
+      // include email in the payload
+      const payload = { ...values, email };
+
+      await axiosPublic.post("/events/create-Event", payload);
       form.reset();
       alert("Event added successfully!");
     } catch (error) {
@@ -53,8 +61,10 @@ const AddEvent = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-4 border rounded shadow">
-      <h2 className="text-2xl font-semibold mb-4">Add Event</h2>
+    <div className="min-h-screen max-w-2xl mx-auto mt-10 p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition">
+      <h2 className="text-2xl font-bold mb-6 text-center text-[#ED4250]">
+        Add Event
+      </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Event Title */}
@@ -159,7 +169,11 @@ const AddEvent = () => {
           />
 
           {/* Submit */}
-          <Button type="submit" disabled={loading} className="w-full">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#3A39CE] hover:bg-[#2a29a6] text-white"
+          >
             {loading ? "Adding..." : "Add Event"}
           </Button>
         </form>
