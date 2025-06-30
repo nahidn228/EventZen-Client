@@ -103,7 +103,7 @@ const Events = () => {
         <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {events.length === 0 && !isLoading && <p>No events found.</p>}
           {events.map((event: Event) => (
-            <EventCard key={event._id} event={event} />
+            <EventCard key={event._id} event={event} refetch={refetch} />
           ))}
         </div>
       </div>

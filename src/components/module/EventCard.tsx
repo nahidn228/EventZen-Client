@@ -1,4 +1,5 @@
-import React from "react";
+import useAxiosPublic from "@/hook/useAxiosPublic";
+import { useState } from "react";
 
 interface Event {
   _id?: string;
@@ -10,7 +11,28 @@ interface Event {
   attendeeCount: number;
 }
 
-const EventCard: React.FC<{ event: Event }> = ({ event }) => {
+const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
+  event,
+  refetch,
+}) => {
+  const [isJoining, setIsJoining] = useState(false);
+
+  const axiosPublic = useAxiosPublic();
+
+  const handleJoinEvent = async () => {
+    if (!event._id) return;
+    try {
+      setIsJoining(true);
+      await axiosPublic.put(`/events/${event._id}`, {
+        attendeeCount: event.attendeeCount + 1,
+      });
+      await refetch();
+    } catch (error) {
+      console.error("Failed to join event:", error);
+    } finally {
+      setIsJoining(false);
+    }
+  };
   return (
     <div className="group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transform transition duration-300 bg-white">
       {/* Event image */}
@@ -22,8 +44,12 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
         />
         {/* overlay on hover */}
         <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex justify-center items-center">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            View Details
+          <button
+            onClick={handleJoinEvent}
+            disabled={isJoining}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            {isJoining ? "Joining..." : "Join Event"}
           </button>
         </div>
       </div>
@@ -38,7 +64,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
           {new Date(event.eventDate).toLocaleDateString()}
         </p>
         <p className="text-xs text-gray-600">
-          Host: <span className="font-medium">{event.name}</span> | 🎟️{" "}
+          Name: <span className="font-medium">{event.name}</span> | 🎟️{" "}
           {event.attendeeCount} attendees
         </p>
         <p className="text-gray-700 text-sm truncate">{event.description}</p>
