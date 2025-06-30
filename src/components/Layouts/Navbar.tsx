@@ -26,18 +26,26 @@ const NewNavbar = () => {
         </li>
         <li>
           <NavLink
-            to="/meals"
+            to="/events"
             className={({ isActive }) => (isActive ? "bg-blue-700" : "")}
           >
-            Meals
+            Events
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/upcomingMeals"
+            to="/addEvent"
             className={({ isActive }) => (isActive ? "bg-blue-700" : "")}
           >
-            Upcoming
+            Add Event
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/myEvent"
+            className={({ isActive }) => (isActive ? "bg-blue-700" : "")}
+          >
+            MY Event
           </NavLink>
         </li>
       </>
