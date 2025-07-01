@@ -21,18 +21,34 @@ const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
 
   const handleJoinEvent = async () => {
     if (!event._id) return;
+
     try {
       setIsJoining(true);
-      await axiosPublic.put(`/events/${event._id}`, {
-        attendeeCount: event.attendeeCount + 1,
+
+      const currentUser = localStorage.getItem("currentUser");
+      const user = currentUser ? JSON.parse(currentUser) : null;
+      const token = user?.token;
+      const email = user?.token;
+
+      if (!email) {
+        return alert("You have to login first to join our event");
+      }
+
+      await axiosPublic.put(`/events/join/${event._id}`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       await refetch();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Failed to join event:", error);
+      alert(`${error?.response?.data?.message}`);
     } finally {
       setIsJoining(false);
     }
   };
+
   return (
     <div className="group rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transform transition duration-300 flex flex-col justify-between">
       {/* Event image */}

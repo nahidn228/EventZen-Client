@@ -45,11 +45,16 @@ const AddEvent = () => {
       const currentUser = localStorage.getItem("currentUser");
       const user = currentUser ? JSON.parse(currentUser) : null;
       const email = user?.email;
+      const token = user?.token;
 
       // include email in the payload
       const payload = { ...values, email };
 
-      await axiosPublic.post("/events/create-Event", payload);
+      await axiosPublic.post("/events/create-Event", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       form.reset();
       alert("Event added successfully!");
     } catch (error) {

@@ -25,6 +25,7 @@ const MyEvents = () => {
       const currentUser = localStorage.getItem("currentUser");
       const user = currentUser ? JSON.parse(currentUser) : null;
       const email = user?.email;
+      const token = user?.token;
 
       if (!email) {
         console.warn("User email not found in localStorage");
@@ -34,6 +35,9 @@ const MyEvents = () => {
       const res = await axiosPublic.get(`/events/my-event`, {
         params: {
           email,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
 

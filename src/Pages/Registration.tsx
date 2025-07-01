@@ -42,7 +42,7 @@ const Registration = () => {
       await axiosPublic.post("/users/create-user", values);
       form.reset();
       alert("Registration successful!");
-      navigate('/login')
+      navigate("/login");
     } catch (error) {
       console.error("Failed to register:", error);
       alert("Failed to register");
@@ -52,87 +52,89 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen max-w-md mx-auto mt-10 p-6 border rounded shadow space-y-6 ">
-      <h2 className="text-2xl font-semibold text-center">Register</h2>
+    <div className="min-h-screen">
+      <div className=" max-w-xl mx-auto mt-10 p-6 border rounded shadow space-y-6 ">
+        <h2 className="text-2xl font-semibold text-center">Register</h2>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Name */}
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Name */}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Email */}
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="you@example.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Password */}
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* Password */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="••••••••" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Photo URL */}
-          <FormField
-            control={form.control}
-            name="photoURL"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Photo URL</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="https://example.com/photo.jpg"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  This will be used as your profile photo.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* Photo URL */}
+            <FormField
+              control={form.control}
+              name="photoURL"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Photo URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://example.com/photo.jpg"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    This will be used as your profile photo.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Submit */}
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Registering..." : "Register"}
-          </Button>
-        </form>
-      </Form>
+            {/* Submit */}
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? "Registering..." : "Register"}
+            </Button>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 };

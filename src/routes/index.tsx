@@ -6,19 +6,32 @@ import AddEvent from "@/Pages/AddEvent";
 import MyEvents from "@/Pages/MyEvents";
 import Registration from "@/Pages/Registration";
 import Login from "@/Pages/Login";
+import HomeBanner from "@/Pages/HomeBanner";
+import ErrorPage from "@/Pages/ErrorPage";
+import PrivateRoute from "./PrivateRoute";
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
+      {
+        path: "/",
+        element: <HomeBanner />,
+      },
       {
         path: "/events",
         element: <Events />,
       },
       {
         path: "/addEvent",
-        element: <AddEvent />,
+        element: (
+          <PrivateRoute>
+            <AddEvent />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/myEvents",
