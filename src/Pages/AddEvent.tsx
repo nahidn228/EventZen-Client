@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,20 +11,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "@/hook/useAxiosPublic";
-import { useState } from "react";
+import { useNavigate } from "react-router";
 
 interface EventFormValues {
   eventTitle: string;
   name: string;
-  eventDate: string; // date + time as ISO string
+  eventDate: string;
   location: string;
   description: string;
   attendeeCount: number;
 }
 
 const AddEvent = () => {
+  const navigate = useNavigate();
   const form = useForm<EventFormValues>({
     defaultValues: {
       eventTitle: "",
@@ -34,11 +37,13 @@ const AddEvent = () => {
       attendeeCount: 0,
     },
   });
+
   const axiosPublic = useAxiosPublic();
   const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertType, setAlertType] = useState<"success" | "error" | null>(null);
 
   const onSubmit = async (values: EventFormValues) => {
-    console.log(values);
     try {
       setLoading(true);
 
@@ -47,19 +52,25 @@ const AddEvent = () => {
       const email = user?.email;
       const token = user?.token;
 
-      // include email in the payload
       const payload = { ...values, email };
 
       await axiosPublic.post("/events/create-Event", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
+
       form.reset();
-      alert("Event added successfully!");
+      setAlertMessage("Event added successfully!");
+      setAlertType("success");
+
+      setTimeout(() => {
+        setAlertMessage(null);
+        setAlertType(null);
+        navigate("/myEvents");
+      }, 1500); // optional delay before navigation
     } catch (error) {
       console.error("Failed to add event:", error);
-      alert("Failed to add event");
+      setAlertMessage("Failed to add event. Please try again.");
+      setAlertType("error");
     } finally {
       setLoading(false);
     }
@@ -70,6 +81,19 @@ const AddEvent = () => {
       <h2 className="text-2xl font-bold mb-6 text-center text-[#ED4250]">
         Add Event
       </h2>
+
+      {alertMessage && alertType && (
+        <Alert
+          variant={alertType === "success" ? "default" : "destructive"}
+          className="mb-6"
+        >
+          <AlertTitle>
+            {alertType === "success" ? "Success" : "Error"}
+          </AlertTitle>
+          <AlertDescription>{alertMessage}</AlertDescription>
+        </Alert>
+      )}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Event Title */}
@@ -150,7 +174,7 @@ const AddEvent = () => {
             )}
           />
 
-          {/* AttendeeCount (default 0, optional change) */}
+          {/* AttendeeCount */}
           <FormField
             control={form.control}
             name="attendeeCount"

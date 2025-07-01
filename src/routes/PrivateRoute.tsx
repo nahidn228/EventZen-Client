@@ -1,6 +1,11 @@
+import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router";
 
-const PrivateRoute = ({ children }) => {
+interface Props {
+  children: ReactNode;
+}
+
+const PrivateRoute = ({ children }: Props) => {
   const currentUser = localStorage.getItem("currentUser");
   const user = currentUser ? JSON.parse(currentUser) : null;
 

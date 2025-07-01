@@ -1,5 +1,7 @@
+import React, { useState, useEffect } from "react";
 import useAxiosPublic from "@/hook/useAxiosPublic";
-import { useState } from "react";
+import axios from "axios";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface Event {
   _id?: string;
@@ -16,8 +18,20 @@ const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
   refetch,
 }) => {
   const [isJoining, setIsJoining] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertType, setAlertType] = useState<"success" | "error" | null>(null);
 
   const axiosPublic = useAxiosPublic();
+
+  useEffect(() => {
+    if (alertMessage) {
+      const timer = setTimeout(() => {
+        setAlertMessage(null);
+        setAlertType(null);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [alertMessage]);
 
   const handleJoinEvent = async () => {
     if (!event._id) return;
@@ -28,10 +42,12 @@ const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
       const currentUser = localStorage.getItem("currentUser");
       const user = currentUser ? JSON.parse(currentUser) : null;
       const token = user?.token;
-      const email = user?.token;
+      const email = user?.email; // <-- Fix here: was user?.token before!
 
       if (!email) {
-        return alert("You have to login first to join our event");
+        setAlertType("error");
+        setAlertMessage("You have to login first to join our event");
+        return;
       }
 
       await axiosPublic.put(`/events/join/${event._id}`, null, {
@@ -40,10 +56,21 @@ const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
         },
       });
 
+      setAlertType("success");
+      setAlertMessage("Successfully joined the event!");
       await refetch();
     } catch (error: unknown) {
-      console.error("Failed to join event:", error);
-      alert(`${error?.response?.data?.message}`);
+      if (axios.isAxiosError(error) && error.response) {
+        setAlertType("error");
+        setAlertMessage(
+          error.response.data?.message || "Failed to join event."
+        );
+        console.error("Failed to join event:", error.response.data);
+      } else {
+        setAlertType("error");
+        setAlertMessage("Failed to join event.");
+        console.error("Failed to join event:", error);
+      }
     } finally {
       setIsJoining(false);
     }
@@ -51,6 +78,19 @@ const EventCard: React.FC<{ event: Event; refetch: () => void }> = ({
 
   return (
     <div className="group rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transform transition duration-300 flex flex-col justify-between">
+      {/* Alert */}
+      {alertMessage && alertType && (
+        <Alert
+          variant={alertType === "success" ? "default" : "destructive"}
+          className="rounded-none"
+        >
+          <AlertTitle>
+            {alertType === "success" ? "Success" : "Error"}
+          </AlertTitle>
+          <AlertDescription>{alertMessage}</AlertDescription>
+        </Alert>
+      )}
+
       {/* Event image */}
       <div className="relative h-48 overflow-hidden">
         <img

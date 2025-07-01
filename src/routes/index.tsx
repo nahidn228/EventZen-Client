@@ -10,7 +10,6 @@ import HomeBanner from "@/Pages/HomeBanner";
 import ErrorPage from "@/Pages/ErrorPage";
 import PrivateRoute from "./PrivateRoute";
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,7 +34,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/myEvents",
-        element: <MyEvents />,
+        element: (
+          <PrivateRoute>
+            <MyEvents />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/registration",
