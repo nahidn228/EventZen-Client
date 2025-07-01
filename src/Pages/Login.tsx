@@ -53,7 +53,7 @@ const Login = () => {
           })
         );
 
-        navigate("/");
+        navigate("/events");
       } else {
         alert("Login failed: " + res.data.message);
       }

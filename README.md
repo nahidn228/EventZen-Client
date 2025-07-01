@@ -1,69 +1,52 @@
-# React + TypeScript + Vite
+# 🗓 EventZen
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+EventZen — A modern full-stack event management web app where users can explore, create, join, and manage events. Built with React, TypeScript, TailwindCSS, Node.js, Express, MongoDB, and Zod for validation. Includes user authentication, event join feature, real-time attendee tracking, and clean UI with ShadCN components.
 
-Currently, two official plugins are available:
+## 🎯 Objective
+Build a fully functional Event Management web application that supports:
+- Custom authentication system (without third-party auth)
+- Dynamic event operations: add, update, delete, join
+- Search and filter events by date and title
+- Responsive, user-friendly design
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
+- Create and update events with details like title, date, location, and description
+- Join events (one user can join only once)
+- Delete your own events
+- Token-based authentication
+- Responsive UI with React & ShadCN
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 Tech Stack
+- **Frontend:** React, TypeScript, React Hook Form, Axios, Tailwind CSS, ShadCN UI
+- **Backend:** Node.js, Express.js, MongoDB, Zod (validation)
+- **Deployment:** Vercel (frontend & backend)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🌱 Future Improvements
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- 🛡 **Social Login**: Add Google/Facebook authentication for easier signup
+- 🏷 **Tags & Categories**: Enable filtering and organizing events by tags
+- 🔔 **Real-time Notifications**: Notify users when events are updated or joined
+- 📊 **Event Analytics**: Show views, join stats, and trends
+- 📅 **Calendar View**: Visualize upcoming events in a calendar layout
+- 📱 **PWA & Mobile App**: Build a progressive web app / mobile-friendly version
+- 💬 **Comments & Reviews**: Allow users to share feedback on events
+- ✨ **UI/UX Enhancements**: Add smooth animations and better transitions
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🌐 Live Demo
+- Frontend: [https://eventzen-ashen.vercel.app](https://eventzen-ashen.vercel.app)
+- Backend API: [https://eventzen-server.vercel.app/](https://eventzen-server.vercel.app/)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📦 Installation
+```bash
+# Clone the repository
+git clone https://github.com/nahidn228/EventZen-Client.git
+cd EventZen-Client
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
