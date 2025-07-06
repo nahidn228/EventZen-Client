@@ -53,7 +53,7 @@ const Registration = () => {
 
   return (
     <div className="min-h-screen">
-      <div className=" max-w-xl mx-auto mt-10 p-6 border rounded shadow space-y-6 ">
+      <div className=" max-w-xl mx-auto mt-10 p-6 border rounded-xl shadow-xl space-y-6 ">
         <h2 className="text-2xl font-semibold text-center">Register</h2>
 
         <Form {...form}>
